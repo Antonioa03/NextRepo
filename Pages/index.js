@@ -1,19 +1,15 @@
+// pages/login.js
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useAuth } from '/context/AuthContext';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
+  const { login } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica de autenticación
-    if (username === 'admin' && password === 'password') {
-      router.push('/home');
-    } else {
-      alert('Credenciales incorrectas');
-    }
+    login(username, password);
   };
 
   return (
