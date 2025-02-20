@@ -1,7 +1,6 @@
-// pages/home.js
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '/context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
   const { user } = useAuth();
@@ -21,9 +20,6 @@ export default function Home() {
     <div style={styles.container}>
       <h1 style={styles.title}>Bienvenido a la Página de Inicio</h1>
       <p style={styles.text}>Esta es la página de inicio después del login.</p>
-      <button onClick={() => router.push('/')} style={styles.button}>
-        Cerrar Sesión
-      </button>
     </div>
   );
 }
@@ -43,14 +39,5 @@ const styles = {
   },
   text: {
     fontSize: '18px',
-  },
-  button: {
-    marginTop: '20px',
-    padding: '10px 20px',
-    backgroundColor: '#6200ea',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
   },
 };

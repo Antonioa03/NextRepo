@@ -1,16 +1,29 @@
-// pages/login.js
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { useAuth } from '/context/AuthContext';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
+  const { user, login } = useAuth();
+  const router = useRouter();
+
+  // Redirigir al usuario a la página de inicio si ya está autenticado
+  useEffect(() => {
+    if (user) {
+      router.push('/home');
+    }
+  }, [user]);
 
   const handleLogin = (e) => {
     e.preventDefault();
     login(username, password);
   };
+
+  // Si el usuario ya está autenticado, no mostrar el formulario de login
+  if (user) {
+    return null; // No renderices nada mientras rediriges
+  }
 
   return (
     <div style={styles.container}>
