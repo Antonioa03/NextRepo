@@ -1,19 +1,31 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
   const { user } = useAuth();
   const router = useRouter();
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/'); // Redirige al login si no hay usuario autenticado
-    }
-  }, [user]);
+    // Add a slight delay to ensure localStorage check completes
+    const checkAuth = setTimeout(() => {
+      setIsAuthChecking(false);
+    }, 100);
 
-  if (!user) {
-    return null; // No renderices nada mientras rediriges
+    return () => clearTimeout(checkAuth);
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthChecking) {
+      if (!user) {
+        router.push('/'); // Redirect to login if no user
+      }
+    }
+  }, [user, router, isAuthChecking]);
+
+  if (!user || isAuthChecking) {
+    return null; // Don't render anything while checking or redirecting
   }
 
   return (
