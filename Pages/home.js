@@ -1,29 +1,37 @@
-// pages/home.js
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '/context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
   const { user } = useAuth();
   const router = useRouter();
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/'); // Redirige al login si no hay usuario autenticado
-    }
-  }, [user]);
+    // Add a slight delay to ensure localStorage check completes
+    const checkAuth = setTimeout(() => {
+      setIsAuthChecking(false);
+    }, 100);
 
-  if (!user) {
-    return null; // No renderices nada mientras rediriges
+    return () => clearTimeout(checkAuth);
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthChecking) {
+      if (!user) {
+        router.push('/'); // Redirect to login if no user
+      }
+    }
+  }, [user, router, isAuthChecking]);
+
+  if (!user || isAuthChecking) {
+    return null; // Don't render anything while checking or redirecting
   }
 
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>Bienvenido a la Página de Inicio</h1>
       <p style={styles.text}>Esta es la página de inicio después del login.</p>
-      <button onClick={() => router.push('/')} style={styles.button}>
-        Cerrar Sesión
-      </button>
     </div>
   );
 }
@@ -43,14 +51,5 @@ const styles = {
   },
   text: {
     fontSize: '18px',
-  },
-  button: {
-    marginTop: '20px',
-    padding: '10px 20px',
-    backgroundColor: '#6200ea',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
   },
 };
