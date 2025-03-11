@@ -12,9 +12,9 @@ export default function AnimeCharacters() {
   const [loading, setLoading] = useState(true);
   const [isAuthChecking, setIsAuthChecking] = useState(true);
 
-  // Lista fija de IDs de personajes (estos IDs puedes cambiarlos por los que prefieras)
+  // Lista fija de IDs de personajes
   const fixedCharacterIds = [
-    1, 2, 3, 5, 6,           // Primera página (IDs populares de MyAnimeList)
+    1, 2, 3, 5, 6,           // Primera página 
     7, 8, 11, 12, 13,        // Segunda página
     14, 16, 17, 20, 22,      // Tercera página
     25, 34, 35, 40, 45,      // Cuarta página
@@ -22,7 +22,7 @@ export default function AnimeCharacters() {
   ];
 
   useEffect(() => {
-    // Add a slight delay to ensure localStorage check completes
+    // agregamos un delay para una verificación de autenticación
     const checkAuth = setTimeout(() => {
       setIsAuthChecking(false);
     }, 100);
@@ -33,14 +33,14 @@ export default function AnimeCharacters() {
   useEffect(() => {
     if (!isAuthChecking) {
       if (!user) {
-        router.push('/'); // Redirect to login if no user
+        router.push('/'); // Redireccionar a la página de inicio de sesion si no hay usuario
       } else {
         fetchCharacters();
       }
     }
   }, [user, router, isAuthChecking]);
 
-  // Aseguramos que el body permita scroll
+  // Aseguramos que permita scroll
   useEffect(() => {
     document.body.style.overflow = 'auto';
     document.documentElement.style.overflow = 'auto';
@@ -65,7 +65,7 @@ export default function AnimeCharacters() {
       // Extraemos los datos de cada respuesta
       const characterData = responses.map(response => response.data);
       
-      // Filtramos cualquier resultado nulo (por si algún ID ya no existe)
+      // Filtramos cualquier resultado nulo (por si algún ID no existe)
       const validCharacters = characterData.filter(char => char !== null);
       
       if (validCharacters.length === fixedCharacterIds.length) {
@@ -81,7 +81,7 @@ export default function AnimeCharacters() {
   };
 
   if (!user || isAuthChecking) {
-    return null; // Don't render anything while checking or redirecting
+    return null; // no renderizar nada mientras se verifica la autenticación 
   }
 
   const filteredCharacters = characters.filter((char) =>
@@ -91,13 +91,13 @@ export default function AnimeCharacters() {
   const paginatedCharacters = filteredCharacters.slice((page - 1) * itemsPerPage, page * itemsPerPage);
   const totalPages = Math.ceil(filteredCharacters.length / itemsPerPage);
 
-  // Función para generar los números de página para la paginación estilo tienda
+  // Función para generar los números de página para la paginación inspirado en paginas de tiendas e commerce
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxPageButtonsToShow = 5;
     
     if (totalPages <= maxPageButtonsToShow) {
-      // Si hay 5 o menos páginas, mostramos todas
+      // Si hay 5 o menos páginas, se muestran todas
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
@@ -247,7 +247,7 @@ const styles = {
     boxSizing: 'border-box',
   },
   headerSpace: {
-    height: '80px', // Ajusta esta altura según el tamaño de tu header
+    height: '80px', 
     width: '100%',
   },
   title: {
