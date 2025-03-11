@@ -16,7 +16,7 @@ const Header = () => {
         {/* Logo or Brand */}
         <div style={styles.logoContainer}>
           <Link href="/home" style={styles.logo}>
-            MyApp
+            A01285470
           </Link>
         </div>
 

@@ -24,3 +24,16 @@ body {
 #__next {
   height: 100%;
 }
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.menuItem:hover {
+  background-color: #333333;
+  transform: scale(1.02);
+}
+
+.logoutButton:hover {
+  background-color: #4500a9;
+}
