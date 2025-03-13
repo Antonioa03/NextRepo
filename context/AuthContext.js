@@ -1,42 +1,55 @@
 import { createContext, useState, useContext, useEffect } from 'react';
-import { useRouter } from 'next/router';
 
+// Create the auth context
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true);
 
-  // Verificar si el usuario está autenticado al cargar la página
+  // Check for existing session on initial load
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const savedUser = localStorage.getItem('animeApp_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
     }
+    setLoading(false);
   }, []);
 
+  // Simple login function with hardcoded credentials
   const login = (username, password) => {
+    // Only accept admin/password credentials
     if (username === 'admin' && password === 'password') {
-      const userData = { username };
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
-      router.push('/home');
-    } else {
-      alert('Credenciales incorrectas');
+      const userObj = { username: 'admin' };
+      setUser(userObj);
+      localStorage.setItem('animeApp_user', JSON.stringify(userObj));
+      return true;
     }
+    return false;
   };
 
+  // Simple logout function
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
-    router.push('/');
+    localStorage.removeItem('animeApp_user');
   };
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  // Value object to be provided to consumers
+  const value = {
+    user,
+    loading,
+    login,
+    logout
+  };
 
-export const useAuth = () => useContext(AuthContext);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+// Custom hook for using the auth context
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
