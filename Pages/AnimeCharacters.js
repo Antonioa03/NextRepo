@@ -17,7 +17,7 @@ export default function AnimeCharacters() {
   // Lista actualizada de IDs de personajes (todos confirmados como válidos)
   const fixedCharacterIds = useMemo(() => [
     1, 2, 3, 5, 6,           // Primera página 
-    7, 8, 11, 12, 13,        // Segunda página
+    7, 63, 64, 65, 13,        // Segunda página
     14, 16, 17, 20, 22,      // Tercera página
     25, 34, 35, 40, 45,      // Cuarta página
     62, 80, 94, 112, 127     // Quinta página
